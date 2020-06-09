@@ -3,6 +3,7 @@
     padding-left: 2%;
     padding-right: 2%;
     display: inline-table;
+    align-items: center;
 }
 
 .dropdown-title {
@@ -21,4 +22,8 @@
     padding-left: 2%;
     display: inline-table;
     max-height: 4%
+}
+
+.vehicle-options {
+    margin-top: 20%;
 }
