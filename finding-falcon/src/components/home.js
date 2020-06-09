@@ -40,20 +40,20 @@ export default class Falcon extends React.Component {
     }
 
     render() {
-        let planetDropdowns = [1,2,3,4].map((count, index) => {
+        let planetDropdowns = [...Array(TotalDestinations).keys()].map((count) => {
             return (
                 <div className='partition' key={count}>
                     <Autocomplete
-                        suggestions={this.state.filteredPlanets} titleName={"Destination " + count} 
-                        addSelection={(selection) => {this.addSelection(selection, count - 1)}}
-                        destinationIndex={count -1} 
+                        suggestions={this.state.filteredPlanets} titleName={"Destination " + (count + 1)} 
+                        addSelection={(selection) => {this.addSelection(selection, count)}}
+                        destinationIndex={count} 
                         selectedPlanets={this.state.selectedPlanets}
                         planets={this.state.planetNames}
                     />
                 </div>
             );
         })
-
+        console.log(this.state.selectedPlanets)
         return (
             <div>
                 <h1>Finding Falcone!</h1>
