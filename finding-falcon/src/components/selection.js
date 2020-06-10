@@ -12,7 +12,8 @@ export default class Falcon extends React.Component {
 
     addSelection = (selection, count) => {
         let selectedPlanets = this.state.selectedPlanets.slice();
-        selectedPlanets[count] = selection;
+        let [newSelection] = this.props.planetNames.filter(planet => planet["name"]===selection);
+        selectedPlanets[count] = newSelection;
         let nonSelectedPlanets = this.props.planetNames.filter(planet => !selectedPlanets.includes(planet));
         this.setState({ selectedPlanets });
         this.props.filterPlanets(nonSelectedPlanets)
@@ -44,13 +45,14 @@ export default class Falcon extends React.Component {
             let vehicleOptions
             if (this.props.planetNames.includes(this.state.selectedPlanets[count])) {
                 vehicleOptions = this.props.vehicles.map((vehicle, index) => {
+                    let disableButton = vehicle["total_no"] === 0 || this.state.selectedPlanets[count]["distance"] > vehicle["max_distance"]
                     return (
                         <VehicleOptions key={index}
                             value={vehicle["name"]}
                             name={"vehicle" + count}
                             vehicleCount={vehicle["total_no"]}
                             onClick={(event) => this.onClick(event, index, count)}
-                            disabled={vehicle["total_no"] === 0} />
+                            disabled={disableButton} />
                     )
                 })
             }

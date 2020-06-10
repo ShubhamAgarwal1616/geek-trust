@@ -31,7 +31,7 @@ class Autocomplete extends Component {
 
         const filteredSuggestions = suggestions.filter(
             suggestion =>
-                suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+                suggestion["name"].toLowerCase().indexOf(userInput.toLowerCase()) > -1
         );
 
         this.setState({
@@ -52,7 +52,7 @@ class Autocomplete extends Component {
     };
 
     onKeyDown = event => {
-        const value = this.props.planets.includes(this.state.userInput) ? this.state.userInput : ""
+        const value = this.props.planets.some((planet) => {return planet["name"] === this.state.userInput}) ? this.state.userInput : ""
         if (event.keyCode === 13) {
             this.setState({
                 showSuggestions: false,
@@ -83,10 +83,10 @@ class Autocomplete extends Component {
                         {filteredSuggestions.map((suggestion, index) => {
                             return (
                                 <li
-                                    key={suggestion}
+                                    key={suggestion["name"]}
                                     onClick={onClick}
                                 >
-                                    {suggestion}
+                                    {suggestion["name"]}
                                 </li>
                             );
                         })}

@@ -8,30 +8,8 @@ import PlanetModel from '../models/planets.js'
 
 export default class Home extends React.Component {
     state = {
-        planetNames: [
-            "Alligator",
-            "Bask",
-            "Crocodilian",
-            "Death Roll",
-            "Eggs",
-            "Jaws",
-            "Reptile",
-            "Solitary",
-            "Tail",
-            "Wetlands"
-        ],
-        nonSelectedPlanets: [
-            "Alligator",
-            "Bask",
-            "Crocodilian",
-            "Death Roll",
-            "Eggs",
-            "Jaws",
-            "Reptile",
-            "Solitary",
-            "Tail",
-            "Wetlands"
-        ],
+        planetNames: [],
+        nonSelectedPlanets: [],
         vehicles: [],
         submission: false,
     }
@@ -45,7 +23,7 @@ export default class Home extends React.Component {
         let planetModel = new PlanetModel();
         planetModel.fetchPlanets().then(() => {
             vehicleModel.fetchVehicles().then(() => {
-                this.setState({ vehicles: vehicleModel.vehiclesList })
+                this.setState({ planetNames: planetModel.planetsList,nonSelectedPlanets: planetModel.planetsList, vehicles: vehicleModel.vehiclesList })
             })
         })
     }
