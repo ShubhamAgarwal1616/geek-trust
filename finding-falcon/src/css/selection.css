@@ -1,0 +1,40 @@
+.partition {
+    max-width: 16%;
+    padding-left: 2%;
+    padding-right: 2%;
+    display: inline-table;
+    align-items: center;
+}
+
+.dropdown-title {
+    padding-top: 3%;
+    font-weight: bolder;
+    font-size: larger;
+    text-align: left;
+    font-family: sans-serif;
+    padding-left: 13%;
+}
+
+.time-partition {
+    font-size: x-large;
+    font-family: sans-serif;
+    margin-top: 1%;
+    padding-left: 2%;
+    display: inline-table;
+    max-height: 4%
+}
+
+.vehicle-options {
+    margin-top: 20%;
+}
+
+.select {
+    height: 500px
+}
+
+.submit {
+    padding: 5px 32px;
+    box-shadow: 5px 5px black;
+    font-size: large;
+    background-color: blanchedalmond;
+}
