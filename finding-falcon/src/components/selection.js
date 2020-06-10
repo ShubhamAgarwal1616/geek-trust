@@ -19,7 +19,7 @@ export default class Falcon extends React.Component {
     }
 
     increasePreviousSelectedVehicleCount = (vehicles, selectedVehicles, destinationIndex) => {
-        let previousSelectedVehicleIndex = vehicles.findIndex((vehicle) => vehicle["name"] === selectedVehicles[destinationIndex]);
+        let previousSelectedVehicleIndex = vehicles.findIndex((vehicle) => vehicle["name"] === selectedVehicles[destinationIndex]["name"]);
         if (previousSelectedVehicleIndex !== -1)
             vehicles[previousSelectedVehicleIndex]["total_no"] += 1;
     }
@@ -28,7 +28,7 @@ export default class Falcon extends React.Component {
         let [selectedVehicle] = vehicles.filter((vehicle) => vehicle["name"] === event.currentTarget.value);
         selectedVehicle["total_no"] -= 1;
         vehicles[vehicleIndex] = selectedVehicle
-        selectedVehicles[destinationIndex] = selectedVehicle["name"]
+        selectedVehicles[destinationIndex] = selectedVehicle
     }
 
     onClick = (event, vehicleIndex, destinationCount) => {
@@ -83,6 +83,7 @@ export default class Falcon extends React.Component {
                         <span className='test'>Time taken: 200</span>
                     </div>
                 </div>
+
             </div>
         );
     }

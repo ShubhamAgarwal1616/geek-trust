@@ -2,6 +2,9 @@ import React from 'react'
 import Falcon from './selection'
 import '../css/home.css'
 import Result from './result.js'
+import FalconModel from '../models/falcon.js'
+import VehicleModel from '../models/vehicles.js'
+import PlanetModel from '../models/planets.js'
 
 export default class Home extends React.Component {
     state = {
@@ -17,12 +20,22 @@ export default class Home extends React.Component {
             "Tail",
             "Wetlands"
         ],
-        vehicles: [{ name: "car1", total_no: 2 }, { name: "car2", total_no: 1 }, { name: "car3", total_no: 1 }, { name: "car4", total_no: 2 }],
+        vehicles: [],
         submission: false,
     }
 
     onSubmit = () => {
         this.setState({ submission: !this.state.submission })
+    }
+
+    componentDidMount() {
+        let vehicleModel = new VehicleModel();
+        let planetModel = new PlanetModel();
+        planetModel.fetchPlanets().then(() => {
+            vehicleModel.fetchVehicles().then(() => {
+                this.setState({ vehicles: vehicleModel.vehiclesList })
+            })
+        })
     }
 
     render() {
@@ -35,7 +48,7 @@ export default class Home extends React.Component {
         else {
             submitButtonText = "Find Falcone!";
             component = <Falcon planetNames={this.state.planetNames}
-                vehicles={this.state.vehicles}/>
+                vehicles={this.state.vehicles} />
         }
         return (
             <div>
