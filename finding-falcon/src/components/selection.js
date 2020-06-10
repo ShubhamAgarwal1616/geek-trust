@@ -6,7 +6,6 @@ import VehicleOptions from "./vehicleOption"
 
 export default class Falcon extends React.Component {
     state = {
-        filteredPlanets: [],
         selectedPlanets: Array(TotalDestinations).fill(""),
         selectedVehicles: Array(TotalDestinations).fill(""),
     }
@@ -14,8 +13,9 @@ export default class Falcon extends React.Component {
     addSelection = (selection, count) => {
         let selectedPlanets = this.state.selectedPlanets.slice();
         selectedPlanets[count] = selection;
-        const filteredPlanets = this.props.planetNames.filter(planet => !selectedPlanets.includes(planet));
-        this.setState({ filteredPlanets, selectedPlanets });
+        let nonSelectedPlanets = this.props.planetNames.filter(planet => !selectedPlanets.includes(planet));
+        this.setState({ selectedPlanets });
+        this.props.filterPlanets(nonSelectedPlanets)
     }
 
     increasePreviousSelectedVehicleCount = (vehicles, selectedVehicles, destinationIndex) => {
@@ -39,10 +39,6 @@ export default class Falcon extends React.Component {
         this.setState({ vehicles, selectedVehicles })
     }
 
-    componentDidMount() {
-        this.setState({filteredPlanets: this.props.planetNames})
-    }
-
     render() {
         let planetDropdowns = [...Array(TotalDestinations).keys()].map((count) => {
             let vehicleOptions
@@ -61,7 +57,7 @@ export default class Falcon extends React.Component {
             return (
                 <div className='partition' key={count}>
                     <Autocomplete
-                        suggestions={this.state.filteredPlanets} titleName={"Destination " + (count + 1)}
+                        suggestions={this.props.nonSelectedPlanets} titleName={"Destination " + (count + 1)}
                         addSelection={(selection) => { this.addSelection(selection, count) }}
                         destinationIndex={count}
                         selectedPlanets={this.state.selectedPlanets}
