@@ -27,3 +27,14 @@
 .vehicle-options {
     margin-top: 20%;
 }
+
+.select {
+    height: 500px
+}
+
+.submit {
+    padding: 5px 32px;
+    box-shadow: 5px 5px black;
+    font-size: large;
+    background-color: blanchedalmond;
+}

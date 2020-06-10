@@ -6,6 +6,7 @@ body {
     border: 1px solid #999;
     padding: 0.5rem;
     width: 200px;
+    background-color: ghostwhite;
   }
   
   .no-suggestions {
@@ -23,6 +24,7 @@ body {
     padding-left: 0;
     width: calc(200px + 1rem);
     text-align: center;
+    background-color: honeydew;
   }
   
   .suggestions li {

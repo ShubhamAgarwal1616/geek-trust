@@ -53,7 +53,6 @@ class Autocomplete extends Component {
 
     onKeyDown = event => {
         const value = this.props.planets.includes(this.state.userInput) ? this.state.userInput : ""
-        console.log(value)
         if (event.keyCode === 13) {
             this.setState({
                 showSuggestions: false,
@@ -100,7 +99,7 @@ class Autocomplete extends Component {
             <div>
                 <em className='dropdown-label'>{this.props.titleName}</em>
                 <div className='dropdown'>
-                    <input
+                    <input 
                         type="text"
                         onChange={onChange}
                         onFocus={onFocus}

@@ -42,17 +42,25 @@ export default class Falcon extends React.Component {
         this.setState({ filteredPlanets, selectedPlanets });
     }
 
-    onClick = (event, index, count) => {
-        let vehicles = this.state.vehicles.slice();
-        let selectedVehicles = this.state.selectedVehicles.slice();
-        let previousSelectedVehicleIndex = vehicles.findIndex((vehicle) => vehicle["name"] === selectedVehicles[count]);
+    increasePreviousSelectedVehicleCount = (vehicles, selectedVehicles, destinationIndex) => {
+        let previousSelectedVehicleIndex = vehicles.findIndex((vehicle) => vehicle["name"] === selectedVehicles[destinationIndex]["name"]);
         if (previousSelectedVehicleIndex !== -1)
             vehicles[previousSelectedVehicleIndex]["total_no"] += 1;
+    }
+
+    decreaseSelectedVehicleCount = (event, vehicles, selectedVehicles, destinationIndex, vehicleIndex) => {
         let [selectedVehicle] = vehicles.filter((vehicle) => vehicle["name"] === event.currentTarget.value);
         selectedVehicle["total_no"] -= 1;
-        vehicles[index] = selectedVehicle
-        selectedVehicles[count] = event.currentTarget.value
-        this.setState({vehicles, selectedVehicles})
+        vehicles[vehicleIndex] = selectedVehicle
+        selectedVehicles[destinationIndex] = selectedVehicle
+    }
+
+    onClick = (event, vehicleIndex, destinationCount) => {
+        let vehicles = this.state.vehicles.slice();
+        let selectedVehicles = this.state.selectedVehicles.slice();
+        this.increasePreviousSelectedVehicleCount(vehicles, selectedVehicles, destinationCount)
+        this.decreaseSelectedVehicleCount(event, vehicles, selectedVehicles, destinationCount, vehicleIndex)
+        this.setState({ vehicles, selectedVehicles })
     }
 
     render() {
@@ -61,12 +69,12 @@ export default class Falcon extends React.Component {
             if (this.state.planetNames.includes(this.state.selectedPlanets[count])) {
                 vehicleOptions = this.state.vehicles.map((vehicle, index) => {
                     return (
-                        <VehicleOptions key={index} 
-                        value={vehicle["name"]} 
-                        name={"vehicle" + count}
-                        vehicleCount={vehicle["total_no"]}
-                        onClick={(event) => this.onClick(event, index, count)}
-                        disabled={vehicle["total_no"] === 0}/>
+                        <VehicleOptions key={index}
+                            value={vehicle["name"]}
+                            name={"vehicle" + count}
+                            vehicleCount={vehicle["total_no"]}
+                            onClick={(event) => this.onClick(event, index, count)}
+                            disabled={vehicle["total_no"] === 0} />
                     )
                 })
             }
@@ -90,9 +98,14 @@ export default class Falcon extends React.Component {
             <div>
                 <h1>Finding Falcone!</h1>
                 <p className='dropdown-title'>Select planets you want to search in:</p>
-                {planetDropdowns}
-                <div className='time-partition'>
-                    <span className='test'>Time taken: 200</span>
+                <div className='select'>  
+                    {planetDropdowns}
+                    <div className='time-partition'>
+                        <span className='test'>Time taken: 200</span>
+                    </div>
+                </div>
+                <div>
+                    <button className='submit'>Find Falcone!</button>
                 </div>
             </div>
         );
