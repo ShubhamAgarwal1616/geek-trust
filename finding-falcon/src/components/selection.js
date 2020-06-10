@@ -6,13 +6,13 @@ import VehicleOptions from "./vehicleOption"
 
 export default class Falcon extends React.Component {
     state = {
-        selectedPlanets: Array(TotalDestinations).fill(""),
-        selectedVehicles: Array(TotalDestinations).fill(""),
+        selectedPlanets: Array(TotalDestinations).fill({}),
+        selectedVehicles: Array(TotalDestinations).fill({}),
     }
 
     addSelection = (selection, count) => {
         let selectedPlanets = this.state.selectedPlanets.slice();
-        let [newSelection] = this.props.planetNames.filter(planet => planet["name"]===selection);
+        let [newSelection] = this.props.planetNames.filter(planet => planet["name"] === selection);
         selectedPlanets[count] = newSelection;
         let nonSelectedPlanets = this.props.planetNames.filter(planet => !selectedPlanets.includes(planet));
         this.setState({ selectedPlanets });
@@ -38,6 +38,7 @@ export default class Falcon extends React.Component {
         this.increasePreviousSelectedVehicleCount(vehicles, selectedVehicles, destinationCount)
         this.decreaseSelectedVehicleCount(event, vehicles, selectedVehicles, destinationCount, vehicleIndex)
         this.setState({ vehicles, selectedVehicles })
+        this.props.calcTime(this.state.selectedPlanets, selectedVehicles)
     }
 
     render() {
@@ -75,10 +76,10 @@ export default class Falcon extends React.Component {
         return (
             <div>
                 <p className='dropdown-title'>Select planets you want to search in:</p>
-                <div className='select'>  
+                <div className='select'>
                     {planetDropdowns}
                     <div className='time-partition'>
-                        <span className='test'>Time taken: 200</span>
+                        <span className='test'>Time taken: {this.props.time}</span>
                     </div>
                 </div>
 

@@ -12,18 +12,31 @@ export default class Home extends React.Component {
         nonSelectedPlanets: [],
         vehicles: [],
         submission: false,
+        model: null,
+        time: 0
     }
 
     onSubmit = () => {
-        this.setState({ submission: !this.state.submission })
+        this.setState({ submission: !this.state.submission, nonSelectedPlanets: this.state.planetNames })
+    }
+
+    calcTime = (selectedPlanets, selectedVehicles) => {
+        const time = this.state.model.calculateTime(selectedPlanets, selectedVehicles);
+        this.setState({time});
     }
 
     componentDidMount() {
         let vehicleModel = new VehicleModel();
         let planetModel = new PlanetModel();
+        let falconModel = new FalconModel();
         planetModel.fetchPlanets().then(() => {
             vehicleModel.fetchVehicles().then(() => {
-                this.setState({ planetNames: planetModel.planetsList,nonSelectedPlanets: planetModel.planetsList, vehicles: vehicleModel.vehiclesList })
+                this.setState({
+                    planetNames: planetModel.planetsList,
+                    nonSelectedPlanets: planetModel.planetsList,
+                    vehicles: vehicleModel.vehiclesList,
+                    model: falconModel
+                })
             })
         })
     }
@@ -38,9 +51,11 @@ export default class Home extends React.Component {
         else {
             submitButtonText = "Find Falcone!";
             component = <Falcon planetNames={this.state.planetNames}
-                vehicles={this.state.vehicles} 
+                vehicles={this.state.vehicles}
                 nonSelectedPlanets={this.state.nonSelectedPlanets}
-                filterPlanets={(planets) => {this.setState({nonSelectedPlanets: planets})}}/>
+                filterPlanets={(planets) => { this.setState({ nonSelectedPlanets: planets }) }}
+                calcTime={this.calcTime}
+                time={this.state.time} />
         }
         return (
             <div>
