@@ -18,14 +18,32 @@ export default class FalconModel {
 
     getToken() {
         return axios
-            .get("https://findfalcone.herokuapp.com/token")
+            .post("https://findfalcone.herokuapp.com/token", "",{
+                headers: {
+                    'content-type': 'application/json'
+                }
+            })
             .then(response => {
+                console.log(response.data)
                 this.token = response.data["token"];
+            })
+            .catch(error => {
+                console.log(error)
             });
     }
 
     findFalcon(selectedPlanets, selectedVehicles) {
         const planets = selectedPlanets.map((planets) => planets["name"])
         const vehicles = selectedPlanets.map((vehicle) => vehicle["name"])
+        return axios
+            .post("https://findfalcone.herokuapp.com/find", {
+                "token": this.token,
+                "planet_names": planets,
+                "vehicle_names": vehicles
+            })
+            .then(response => {
+                console.log(response.data)
+                response.data["status"] === "success" ? this.destinedPlanet = response.data["planet_name"] : this.destinedPlanet = undefined
+            });
     }
 }

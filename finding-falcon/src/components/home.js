@@ -67,9 +67,11 @@ export default class Home extends React.Component {
 
     onSubmit = (text) => {
         if (text === "Find Falcone!") {
-            this.state.model.findFalcon(this.state.selectedPlanets, this.state.selectedVehicles).then(() => {
-                this.setState({
-                    submission: !this.state.submission,
+            this.state.model.getToken().then(() => {
+                this.state.model.findFalcon(this.state.selectedPlanets, this.state.selectedVehicles).then(() => {
+                    this.setState({
+                        submission: !this.state.submission, destinedPlanet: this.state.model.destinedPlanet
+                    })
                 })
             })
         }
@@ -102,7 +104,7 @@ export default class Home extends React.Component {
     render() {
         let component
         let submitButtonText
-        let disabledButton = this.state.selectedVehicles.some((vehicle) => Object.keys(vehicle).length == 0)
+        let disabledButton = this.state.selectedVehicles.some((vehicle) => Object.keys(vehicle).length === 0)
         if (this.state.submission) {
             submitButtonText = "Start Again";
             component = <Result time={this.state.time} destinedPlanet={this.state.destinedPlanet} />
