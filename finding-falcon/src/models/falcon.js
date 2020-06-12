@@ -24,7 +24,6 @@ export default class FalconModel {
                 }
             })
             .then(response => {
-                console.log(response.data)
                 this.token = response.data["token"];
             })
     }

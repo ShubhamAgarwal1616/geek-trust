@@ -12,10 +12,10 @@ export default function Result(props) {
         message = "Failure! Falcone is not found. King Shan is mighty pleased."
     }
     return (
-        <div>
+        <div className='result'>
             <p className='common message'> {message} </p>
             <p className='common time'> Time taken: {props.time} </p>
-            <p className='common'> {planetFound} </p>
+            <p className='common palnet'> {planetFound} </p>
         </div>
     );
 } 
