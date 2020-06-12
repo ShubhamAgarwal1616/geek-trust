@@ -65,6 +65,19 @@ export default class Home extends React.Component {
         this.setState({ vehicles, selectedVehicles, time })
     }
 
+    resetState = () => {
+        let vehicleModel = new VehicleModel();
+        vehicleModel.fetchVehicles().then(() => {
+            this.setState({
+                submission: !this.state.submission,
+                nonSelectedPlanets: this.state.planetNames,
+                time: 0, selectedPlanets: Array(TotalDestinations).fill(undefined),
+                selectedVehicles: Array(TotalDestinations).fill({}),
+                vehicles: vehicleModel.vehiclesList
+            });
+        })
+    }
+
     onSubmit = (text) => {
         if (text === "Find Falcone!") {
             this.state.model.getToken().then(() => {
@@ -76,12 +89,7 @@ export default class Home extends React.Component {
             })
         }
         else {
-            this.setState({
-                submission: !this.state.submission,
-                nonSelectedPlanets: this.state.planetNames,
-                time: 0, selectedPlanets: Array(TotalDestinations).fill(undefined),
-                selectedVehicles: Array(TotalDestinations).fill({})
-            });
+            this.resetState()
         }
     }
 
