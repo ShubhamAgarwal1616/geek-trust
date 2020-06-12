@@ -20,7 +20,7 @@ export default class FalconModel {
         return axios
             .post("https://findfalcone.herokuapp.com/token", "",{
                 headers: {
-                    'content-type': 'application/json'
+                    'Accept': 'application/json'
                 }
             })
             .then(response => {
@@ -40,6 +40,11 @@ export default class FalconModel {
                 "token": this.token,
                 "planet_names": planets,
                 "vehicle_names": vehicles
+            }, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
             })
             .then(response => {
                 console.log(response.data)
