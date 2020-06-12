@@ -5,6 +5,7 @@ import Result from './result.js'
 import FalconModel from '../models/falcon.js'
 import VehicleModel from '../models/vehicles.js'
 import PlanetModel from '../models/planets.js'
+import { TotalDestinations } from "../constants/constants.js"
 
 export default class Home extends React.Component {
     state = {
@@ -13,16 +14,73 @@ export default class Home extends React.Component {
         vehicles: [],
         submission: false,
         model: null,
-        time: 0
+        time: 0,
+        selectedPlanets: Array(TotalDestinations).fill(undefined),
+        selectedVehicles: Array(TotalDestinations).fill({}),
+        destinedPlanet: "undefined"
+
     }
 
-    onSubmit = () => {
-        this.setState({ submission: !this.state.submission, nonSelectedPlanets: this.state.planetNames })
+    clearVehicleSelection = (count) => {
+        let selectedVehicles = this.state.selectedVehicles.slice();
+        let vehicles = this.state.vehicles.slice();
+        selectedVehicles[count] = {};
+        document.getElementsByName("vehicle" + count).forEach((element, index) => {
+            if (element.checked) {
+                element.checked = false;
+                vehicles[index]["total_no"] += 1;
+            }
+        })
+        this.setState({ vehicles, selectedVehicles });
     }
 
-    calcTime = (selectedPlanets, selectedVehicles) => {
-        const time = this.state.model.calculateTime(selectedPlanets, selectedVehicles);
-        this.setState({time});
+    addSelection = (selection, count) => {
+        let selectedPlanets = this.state.selectedPlanets.slice();
+        let [newSelection] = this.state.planetNames.filter(planet => planet["name"] === selection);
+        selectedPlanets[count] = newSelection;
+        let nonSelectedPlanets = this.state.planetNames.filter(planet => !selectedPlanets.includes(planet));
+        this.setState({ selectedPlanets, nonSelectedPlanets });
+        this.clearVehicleSelection(count)
+    }
+
+    increasePreviousSelectedVehicleCount = (vehicles, selectedVehicles, destinationIndex) => {
+        let previousSelectedVehicleIndex = vehicles.findIndex((vehicle) => vehicle["name"] === selectedVehicles[destinationIndex]["name"]);
+        if (previousSelectedVehicleIndex !== -1)
+            vehicles[previousSelectedVehicleIndex]["total_no"] += 1;
+    }
+
+    decreaseSelectedVehicleCount = (event, vehicles, selectedVehicles, destinationIndex, vehicleIndex) => {
+        let [selectedVehicle] = vehicles.filter((vehicle) => vehicle["name"] === event.currentTarget.value);
+        selectedVehicle["total_no"] -= 1;
+        vehicles[vehicleIndex] = selectedVehicle
+        selectedVehicles[destinationIndex] = selectedVehicle
+    }
+
+    onClick = (event, vehicleIndex, destinationCount) => {
+        let vehicles = this.state.vehicles.slice();
+        let selectedVehicles = this.state.selectedVehicles.slice();
+        this.increasePreviousSelectedVehicleCount(vehicles, selectedVehicles, destinationCount)
+        this.decreaseSelectedVehicleCount(event, vehicles, selectedVehicles, destinationCount, vehicleIndex)
+        const time = this.state.model.calculateTime(this.state.selectedPlanets, selectedVehicles);
+        this.setState({ vehicles, selectedVehicles, time })
+    }
+
+    onSubmit = (text) => {
+        if (text === "Find Falcone!") {
+            this.state.model.findFalcon(this.state.selectedPlanets, this.state.selectedVehicles).then(() => {
+                this.setState({
+                    submission: !this.state.submission,
+                })
+            })
+        }
+        else {
+            this.setState({
+                submission: !this.state.submission,
+                nonSelectedPlanets: this.state.planetNames,
+                time: 0, selectedPlanets: Array(TotalDestinations).fill(undefined),
+                selectedVehicles: Array(TotalDestinations).fill({})
+            });
+        }
     }
 
     componentDidMount() {
@@ -44,25 +102,28 @@ export default class Home extends React.Component {
     render() {
         let component
         let submitButtonText
+        let disabledButton = this.state.selectedVehicles.some((vehicle) => Object.keys(vehicle).length == 0)
         if (this.state.submission) {
             submitButtonText = "Start Again";
-            component = <Result />
+            component = <Result time={this.state.time} destinedPlanet={this.state.destinedPlanet} />
         }
         else {
             submitButtonText = "Find Falcone!";
             component = <Falcon planetNames={this.state.planetNames}
                 vehicles={this.state.vehicles}
                 nonSelectedPlanets={this.state.nonSelectedPlanets}
-                filterPlanets={(planets) => { this.setState({ nonSelectedPlanets: planets }) }}
-                calcTime={this.calcTime}
-                time={this.state.time} />
+                time={this.state.time}
+                selectedPlanets={this.state.selectedPlanets}
+                selectedVehicles={this.state.selectedVehicles}
+                addSelection={this.addSelection}
+                onClick={this.onClick} />
         }
         return (
             <div>
                 <h1>Finding Falcone!</h1>
                 {component}
                 <div>
-                    <button className='submit' onClick={this.onSubmit}>{submitButtonText}</button>
+                    <button className='submit' onClick={() => this.onSubmit(submitButtonText)} disabled={disabledButton}>{submitButtonText}</button>
                 </div>
             </div>
         )

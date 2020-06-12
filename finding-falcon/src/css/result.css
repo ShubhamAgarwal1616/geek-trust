@@ -1,0 +1,14 @@
+.common {
+    font-weight: bolder;
+    font-size: larger;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.message {
+    padding-top: 4%;
+}
+
+.time {
+    padding-top: 1%;
+}

@@ -58,6 +58,7 @@ class Autocomplete extends Component {
                 showSuggestions: false,
                 userInput: value
             });
+            document.getElementById(this.props.titleName).blur()
         }
     };
 
@@ -105,6 +106,7 @@ class Autocomplete extends Component {
                         onFocus={onFocus}
                         onKeyDown={this.onKeyDown}
                         value={userInput}
+                        id={this.props.titleName}
                     />
                     {suggestionsListComponent}
                 </div>
