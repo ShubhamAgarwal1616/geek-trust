@@ -27,9 +27,6 @@ export default class FalconModel {
                 console.log(response.data)
                 this.token = response.data["token"];
             })
-            .catch(error => {
-                console.log(error)
-            });
     }
 
     findFalcon(selectedPlanets, selectedVehicles) {
@@ -47,8 +44,10 @@ export default class FalconModel {
                 }
             })
             .then(response => {
-                console.log(response.data)
                 response.data["status"] === "success" ? this.destinedPlanet = response.data["planet_name"] : this.destinedPlanet = undefined
+            })
+            .catch(error => {
+                console.log(error)
             });
     }
 }
